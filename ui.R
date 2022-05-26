@@ -1,12 +1,12 @@
 
 
 library(shiny)
-library(bootstraplib)
+library(bslib)
 library(waiter)
 library(bsplus)
 library(shinyjs)
 
-bs_theme_new(version = "4+3", bootswatch = "slate")
+bs_theme_new(version = "4", bootswatch = "slate")
 
 
 bs_theme_accent_colors(secondary = "#f8f8f8e6")
@@ -30,17 +30,7 @@ ui = tagList(
       ),
       
       column(
-        width = 8,
-        tagList(
-          tags$img(src = "RStudio-Logo-White.png", width = "80px", height = "30px"),
-          tags$img(src = "pipe.png", width = "60px", height = "67px"),
-          tags$img(src = "shiny.png", width = "60px", height = "67px"),
-          tags$img(src = "tidyverse.png", width = "60px", height = "67px"),
-          tags$img(src = "gganimate.png", width = "60px", height = "67px"),
-          tags$img(src = "waiter.png", width = "60px", height = "67px"),
-          tags$img(src = "ggforce.png", width = "60px", height = "67px"),
-          tags$img(src = "glue.png", width = "60px", height = "67px")
-        )
+        width = 8
       )
     ),
     style = "position:absolute; bottom:0; width:95%;
@@ -65,19 +55,11 @@ ui = tagList(
   ## the actual page starts here!
   navbarPage(
     id = "navbar",
-    windowTitle = "Shiny app: Life of Pi",
+    windowTitle = "컴퓨터 힘으로 원주율 계산",
     
     ## title
     title = tagList(
       fluidRow(
-        div(
-          tags$img(src = "ba.png", width = "32px", height = "26px"), HTML("&nbsp;"),
-          "Life of Pi: A Monte Carlo Simulation", HTML("&nbsp;"), style = "color:#aaa;"
-        ),
-        div("BY ZAUAD SHAHREER ABEER", HTML("&nbsp;"),
-            tags$a(href = "https://github.com/shahreyar-abeer", tags$img(src = "GitHub-Mark-Light-120px-plus.png", width = "26px", height = "26px")),
-            tags$a(href = "https://www.linkedin.com/in/zauad-shahreer/", tags$img(src = "LI-In-Bug.png", width = "30px", height = "26px")),
-            style = "color:#aaa; position:absolute; float:right; right: 10px;")
       ) 
     ),
     #############################################

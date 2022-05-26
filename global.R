@@ -7,32 +7,25 @@ library(gifski)
 pre_rendered = c(1 %o% 10^(2:4), 10002)
 slider_vals = sort(c(pre_rendered))
 
-the_data = function(n) {
-  x0 = 0  # origin
-  y0 = 0  # origin
+the_data <- function(n) {
+  x0 <-  0  # origin
+  y0 <-  0  # origin
   
   set.seed(n)
-  x = runif(n, -1, 1)
-  y = runif(n, -1, 1)
+  x <-  runif(n, -1, 1)
+  y <-  runif(n, -1, 1)
   
-  distances = ((x - x0)**2 + (y - y0)**2)**.5
-  point = ifelse(distances < 1, "Inside", "Outside")
-  id = 1:n
-  p = round(cumsum(point == "Inside")/id, 3)
-  pi_hat = round(p * 4, 3)
-  data = data.frame(id, x, y, distances, point, p, pi_hat)
+  distances <-  ((x - x0)**2 + (y - y0)**2)**.5
+  point  <-  ifelse(distances < 1, "Inside", "Outside")
+  id <-  1:n
+  p <-  round(cumsum(point == "Inside")/id, 3)
+  pi_hat <-  round(p * 4, 3)
+  data <- data.frame(id, x, y, distances, point, p, pi_hat)
   return(data)
 }
 
-# estimate_pi = function(the_data) {
-#   n = nrow(the_data)
-#   p = sum(the_data$point == "Inside")/n
-#   pi_hat = round(4*p, 3)
-#   return(pi_hat)
-# }
 
-
-make_anim1 = function(the_data) {
+make_anim1 <- function(the_data) {
   
   n = nrow(the_data)
   
@@ -63,6 +56,9 @@ make_anim1 = function(the_data) {
   
   return(anim1)
 }
+
+make_anim1(the_data(10))
+
 
 make_anim2 = function(the_data) {
   p2 = ggplot(the_data) +

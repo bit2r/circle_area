@@ -1,111 +1,112 @@
 
+# 애니메이션 제작 스크립트 -----------------------
+library(gifski)
+library(gganimate)
+library(tidyverse)
+library(plotly)
 
 
-
-the_data = function(n) {
-  x0 = 0  # origin x co-ordinate
-  y0 = 0  # origin y co-ordinate
+# 1. 모의시험 데이터 --------------------------------
+mc_data <- function(n) {
+  x0 <- 0  # origin x co-ordinate
+  y0 <- 0  # origin y co-ordinate
   
-  x = runif(n, -1, 1)
-  y = runif(n, -1, 1)
+  x <- runif(n, -1, 1)
+  y <- runif(n, -1, 1)
   
-  distances = ((x - x0)**2 + (y - y0)**2)**.5
-  point = ifelse(distances < 1, "Inside", "Outside")
-  id = 1:n
-  pi_hat = cumsum(point == "Inside")/id * 4
+  distances <- ((x - x0)**2 + (y - y0)**2)**.5
+  in_out <- ifelse(distances < 1, "Inside", "Outside")
+  id <- 1:n
+  pi_hat <- cumsum(in_out == "Inside")/id * 4
   
-  data = data.frame(id, x, y, distances, point, pi_hat)
+  data <- data.frame(id, x, y, distances, in_out, pi_hat)
   return(data)
 }
 
+# the_data(10)
 
-make_anim1 = function(the_data) {
-  p1 = ggplot() +
-    geom_circle(aes(x0 = 0, y0 = 0, r = 1)) +
+# 2. MC 애니메이션 --------------------------------
+
+make_circle_anim <-  function(the_data) {
+  
+  n = nrow(the_data)
+  
+  c1 = "#393f47"  # color inside
+  c2 = "#88837d"
+  
+  circle_g <- ggplot() +
+    geom_circle(aes(x0 = 0, y0 = 0, r = 1), color = "#515960") +
     geom_rect(aes(xmin = -1,ymin = -1, xmax = 1, ymax = 1),
-              alpha = 0, color = "black") +
-    geom_point(aes(x = x, y = y, group = seq_along(id), color = point), size = .5, data = the_data) +
+              alpha = 0, color = "#515960") +
+    geom_point(aes(x = x, y = y, group = seq_along(id), color = in_out), size = .7, data = the_data) +
     hrbrthemes::theme_ft_rc() +
-    scale_color_manual(values = c("#b8e186", "red")) + 
     theme(plot.background = element_rect(fill = "#272b30"),
           panel.background = element_rect(fill = "#272b30", color = "#272b30"),
-          legend.position = "none") +
-    scale_y_continuous(expand = expansion()) +
-    transition_reveal(along = id) 
-  
-  anim1 = animate(p1, nframes = 10, fps = 1, duration = 10,
-                  width = 600, height = 500, res = 100,
-                  renderer = gifski_renderer(loop = F, "anim.gif"))
-  
-  return(anim1)
-}
-
-
-
-a1 = make_anim1(d)
-
-anim_save("anim.gif")
-save_animation(a1, "aa.gif")
-
-make_anim2 = function(the_data) {
-  p2 = ggplot(the_data) +
-    geom_line(aes(x = id, y = pi_hat)) + 
-    geom_hline(yintercept = pi) +
+          legend.position = "none",
+          plot.title = element_text(color = "#88837d"),
+          plot.caption = element_text(size = 10)) +
+    scale_color_manual(values = c(c1, c2)) + 
+    labs(
+      title = "p: {the_data$p[frame_along]}",
+      caption = "Can you smell the rain?"
+    ) +
     transition_reveal(along = id)
   
-  anim2 = animate(p2, nframes = 20, fps = 2, duration = 10,
-          width = 600, height = 500, res = 150,
-          renderer = gifski_renderer(loop = F))
-  return(anim2)
+  circle_anim = animate(circle_g, nframes = 80, fps = 8,
+                  width = 550, height = 540, res = 90,
+                  renderer = gifski_renderer(loop = F))
+  
+  return(circle_anim)
 }
 
+## 2.1. 100/1000/10000 모의시험 --------------------------------
 
-d = the_data(1000)
+make_circle_anim(mc_data(100))
+anim_save("www/circle_100.gif", animation = last_animation())
 
-make_anim2(d)
+make_circle_anim(mc_data(1000))
+anim_save("www/circle_1000.gif", animation = last_animation())
 
-make_anim1(d)
+make_circle_anim(mc_data(10000))
+anim_save("www/circle_10000.gif", animation = last_animation())
+
+# 3. Progress 애니메이션 --------------------------------
+
+make_progress_anim <-  function(the_data) {
+  
+  progress_g <- ggplot(the_data) +
+    geom_line(aes(x = id, y = pi_hat), color = "#E7553C") + 
+    geom_hline(yintercept = pi, color = "#75AADB", alpha = .5, linetype = "longdash") +
+    hrbrthemes::theme_ft_rc(base_family = "NanumGtohic") +
+    ylim(0, 6) +
+    theme(plot.background = element_rect(fill = "#272b30"),
+          panel.background = element_rect(fill = "#272b30", color = "#272b30"),
+          plot.title = element_text(color = "#88837d"),
+          plot.caption = element_text(size = 10)) +
+    labs(
+      title = "원주율 (pi) 추정: {the_data$pi_hat[frame_along]}",
+      caption = "실시간 난수",
+      y = "원주율 추정값"
+    ) +
+    xlab("누적 난수 갯수") +
+    transition_reveal(along = id)
+  
+  progress_anim <- animate(progress_g, nframes = 80, fps = 8,
+                  width = 550, height = 540, res = 90,
+                  renderer = gifski_renderer(loop = F))
+    
+  return(progress_anim)
+}
+
+## 3.1. 100/1000/10000 모의시험 --------------------------------
+
+make_progress_anim(mc_data(100))
+anim_save("www/progress_100.gif", animation = last_animation())
 
 
-p2 = ggplot(d) +
-  geom_line(aes(x = id, y = pi)) + 
-  geom_hline(yintercept = pi) +
-  transition_reveal(along = id)
-
-animate(p2, nframes = 30, fps = 3, duration = 10,
-        width = 800, height = 600, res = 150,
-        renderer = gifski_renderer(loop = F))
-
-make_anim2(d)
+make_progress_anim(mc_data(1000))
+anim_save("www/progress_100.gif", animation = last_animation())
 
 
-d = the_data(10000)
-
-p1 = ggplot(d) +
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1)) +
-  geom_rect(aes(xmin = -1,ymin = -1, xmax = 1, ymax = 1),
-            alpha = 0, color = "black") +
-  geom_point(aes(x = x, y = y, color = point), size = .5) +
-  hrbrthemes::theme_ft_rc() +
-  scale_color_manual(values = c("#b8e186", "red")) + 
-  theme(plot.background = element_rect(fill = "#272b30"),
-        panel.background = element_rect(fill = "#272b30", color = "#272b30"),
-        legend.position = "none")
-
-ggplotly(p1) %>%
-  animation_opts(redraw = FALSE)
-
-p2 = ggplot(d) +
-  geom_line(aes(x = id, y = pi_hat, frame = id)) + 
-  geom_hline(yintercept = pi)
-
-ggplotly(p2) %>% animation_opts(redraw = FALSE)
-
-
-p <- ggplot(txhousing, aes(month, median)) +
-  geom_line(aes(group = year), alpha = 0.3) +
-  geom_smooth() +
-  geom_line(aes(frame = year, ids = month), color = "red")
-
-ggplotly(p) %>%
-  animation_opts(1000)
+make_progress_anim(mc_data(10000))
+anim_save("www/progress_100.gif", animation = last_animation())
