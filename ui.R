@@ -95,9 +95,8 @@ ui = tagList(
           div(p("정사각형 면적: \\((2r)^2 = 4\\)"), align = "center"),
           div(p("\\(P(원내부에 \\ 떨어지는 \\ 점의 \\ 수  ) = \\pi/4\\)"), align = "center"),
           div(p("\\(p = \\pi/4 \\implies \\pi = 4 p\\)"), align = "center"),
-          p("상기 수식을 사용해서 원주율 \\(\\pi\\) 를 계산한다."),
-          br(),
-          div(actionButton("go_to_work", "바로 드가쟈~~~", status = "success"), align = "center")
+          div(p("상기 수식을 사용해서 원주율 \\(\\pi\\) 를 계산한다."), align = "center"),
+          br()
         ),
       column(
         width <- 2,

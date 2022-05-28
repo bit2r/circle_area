@@ -6,6 +6,12 @@ library(tidyverse)
 library(plotly)
 
 
+sysfonts::font_add_google("Noto Sans KR", family = "noto-sans")
+library(showtext)
+showtext_auto()
+
+
+
 # 1. 모의시험 데이터 --------------------------------
 mc_data <- function(n) {
   x0 <- 0  # origin x co-ordinate
@@ -47,8 +53,8 @@ make_circle_anim <-  function(the_data) {
           plot.caption = element_text(size = 10)) +
     scale_color_manual(values = c(c1, c2)) + 
     labs(
-      title = "p: {the_data$p[frame_along]}",
-      caption = "Can you smell the rain?"
+      title = "원주율: {the_data$p[frame_along]}",
+      caption = ""
     ) +
     transition_reveal(along = id)
   
@@ -105,8 +111,8 @@ anim_save("www/progress_100.gif", animation = last_animation())
 
 
 make_progress_anim(mc_data(1000))
-anim_save("www/progress_100.gif", animation = last_animation())
+anim_save("www/progress_1000.gif", animation = last_animation())
 
 
 make_progress_anim(mc_data(10000))
-anim_save("www/progress_100.gif", animation = last_animation())
+anim_save("www/progress_10000.gif", animation = last_animation())
