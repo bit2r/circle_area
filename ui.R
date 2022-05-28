@@ -1,11 +1,5 @@
 
 
-library(shiny)
-library(bslib)
-library(waiter)
-library(bsplus)
-library(shinyjs)
-
 bs_theme_new(version = "4", bootswatch = "slate")
 
 
@@ -30,7 +24,17 @@ ui = tagList(
       ),
       
       column(
-        width = 8
+        width = 8,
+        tagList(
+          tags$img(src = "RStudio-Logo-White.png", width = "80px", height = "30px"),
+          tags$img(src = "pipe.png", width = "60px", height = "67px"),
+          tags$img(src = "shiny.png", width = "60px", height = "67px"),
+          tags$img(src = "tidyverse.png", width = "60px", height = "67px"),
+          tags$img(src = "gganimate.png", width = "60px", height = "67px"),
+          tags$img(src = "waiter.png", width = "60px", height = "67px"),
+          tags$img(src = "ggforce.png", width = "60px", height = "67px"),
+          tags$img(src = "glue.png", width = "60px", height = "67px")
+        )
       )
     ),
     style = "position:absolute; bottom:0; width:95%;
@@ -55,69 +59,50 @@ ui = tagList(
   ## the actual page starts here!
   navbarPage(
     id = "navbar",
-    windowTitle = "컴퓨터 힘으로 원주율 계산",
+    windowTitle = "원주율 - 몬테카를로 모의시행",
     
     ## title
     title = tagList(
       fluidRow(
+        div(
+          tags$img(src = "koRea_logo.png", width = "32px", height = "26px"), HTML("&nbsp;"),
+          "원주율 - 몬테카를로 모의시행", HTML("&nbsp;"), style = "color:#aaa;"
+        )
       ) 
     ),
     #############################################
     ## Home tab
     tabPanel(
-      title = "Home",
+      title = "소개",
       fluidRow(
         column(
-          width = 1,
+          width <- 2,
           br(),
-          br(),
-          tags$a(href = "https://github.com/shahreyar-abeer/life_of_pi", img(src = "life_of_pi_hex.png", width = "100px", height = "110px", style = "position: absolute; top: 200px; left:10px;"))
-          
+          br()
         ),
         
         column(
-          width = 9,
+          width <- 8,
           
-          p("This app is designed to run a Monte Carlo Simulation to
-            estimate the value of \\(\\pi\\). I'm sorry to disappoint some of you
-            who might have though it had something to do with the movie.
-            But I can share a bit of history though."),
-          p("Pi wasn’t always known as pi. Before the 1700s,
-            people referred to the number we know as pi as
-            'the quantity which when the diameter is multiplied by it, yields the circumference'.
-            Not surprisingly, people got tired of saying so much whenever they wanted
-            to talk about Pi. The Welsh mathematician William Jones,
-            a friend of Sir Isaac Newton, began using the symbol for \\(\\pi\\) in 1706."),
-          # 
-          # p("This app shows a Monte Carlo estimation of pi 
-          # Those who thought this app had something to do the movie, I'm sorry to disappoint.
-          # It has less to do with the movie and more to do with mathematician's favorite number, \\(\\pi\\)"),
-          # p("\\(\\pi\\) has been around since the inception of the earth,
-          #   since it's the ratio of cirumference to the diamtere of a circle.
-          #   So it's always been there! Waiting to be discovered by someone. "),
-          
-          div(h4("The Algorithm"), align = "center"),
-          p("At first, we inscribe a circle with unit radius (\\(r = 1)\\) in a square (\\(length = 2 r\\)),
-            note down the area of the circle and the square. Then we let some points fall
-            freely on the canvass. The points are independent and may fall at any place within 
-            the square. We then take a note of the poportion \\((p)\\) of points that have fallen inside
-            the circle to the total number of points. This proportion gives 1/4 th of \\(\\pi\\).
-            We then multiply the result with 4 to get an estimate of \\(\\pi\\)."),
-          p("The mathematics working behind is: "),
-          div(p("Area of the circle, \\(A = \\pi r^2 = \\pi\\)"), align = "center"),
-          div(p("Area of square, \\((2r)^2 = 4\\)"), align = "center"),
-          div(p("\\(P(a \\ point \\ falling \\ inside \\ the \\ circle) = \\pi/4\\)"), align = "center"),
+          p("2020년 Shiny 경진대회 수상작 Shiny App을 한글화한 것입니다. 
+             원주율 \\(\\pi\\) 를 몬테카를로 모의시험으로 찾아가는 과정을
+             시각적으로 표현하여 이해하기 쉬운 형태로 구현한 사례입니다."),
+          p("2020년 작성된 코드라 현재 시점 패키지와 코드를 가독성 높게 다시 작성한 것으로 
+            자세한 사항은 한국 R 사용자회 GitHub 저장소에서 확인할 수 있습니다."),
+          div(h4("원주율을 계산하는 모의시행 알고리즘"), align = "center"),
+          p(" "),
+          div(p("원면적: \\(A = \\pi r^2 = \\pi\\)"), align = "center"),
+          div(p("정사각형 면적: \\((2r)^2 = 4\\)"), align = "center"),
+          div(p("\\(P(원내부에 \\ 떨어지는 \\ 점의 \\ 수  ) = \\pi/4\\)"), align = "center"),
           div(p("\\(p = \\pi/4 \\implies \\pi = 4 p\\)"), align = "center"),
-          p("We shall estimate \\(\\pi\\) using this equation. If you are interested to know more, you should find some good stuff ",
-            tags$a("here.", href = 'http://www.science.smith.edu/dftwiki/images/b/b9/MonteCarloBookChapter.pdf', target = '_blank'),
-            "And no, there are no tigers there!"),
+          p("상기 수식을 사용해서 원주율 \\(\\pi\\) 를 계산한다."),
           br(),
-          div(actionButton("go_to_work", "Enough chit-chat, show me some work!", status = "success"), align = "center")
+          div(actionButton("go_to_work", "바로 드가쟈~~~", status = "success"), align = "center")
         ),
-        
-        column(
-          width = 2,
-          tags$a(href = "https://www.upwork.com/o/profiles/users/~01a42a4a2859568446/", tags$img(src = "logo.png", width = "200px", height = "100px", style = "position: absolute; top: 200px; right:10px;"))
+      column(
+        width <- 2,
+        br(),
+        br()
         )
       ),
     ),
@@ -125,30 +110,26 @@ ui = tagList(
     #############################################
     ## Work tab
     tabPanel(
-      title = "Work",
+      title = "모의시행",
       sidebarLayout(
         sidebarPanel(
           width = 3,
-          shinyWidgets::sliderTextInput("n", "Number of points", slider_vals, 1000, F, T)%>%
+          shinyWidgets::sliderTextInput("n", "시행횟수", slider_vals, 1000, F, T)%>%
             shinyInput_label_embed(
               shiny_iconlink() %>%
                 bs_embed_popover(
                   title = "range: (100-10002)",
-                  content = "Values that are multiples of 100 load quite fast. Special value: 10001.
-                  Other values will take some time to render and the animation won't be quite as smooth.",
+                  content = "시행횟수를 100, 1000, 10000 으로 설정하면 빠르게 결과를 확인할 수 있습니다.",
                   placement = "right"
                 )
             ),
           
-          div(actionButton("run", "Let's run!", icon = icon("walking"), width = "40%"), align = "center"),
+          div(actionButton("run", "좋아 바로 시행", icon = icon("walking"), width = "40%"), align = "center"),
           br(),
-          p("Just a note: We will never be able to find all the digits of pi because of its very definition as an
-            irrational number. Babylonian civilization used the fraction 3 ⅛, the Chinese used
-            the integer 3. By 1665, Isaac Newton calculated pi to 16 decimal places."),
-          p("In 2017, a Swiss scientist computed more than 22 trillion digits of pi!
-            The calculation took over a hundred days."),
-          p("Oh, I hope you have tried the special number, it's 10002."),
-          p("And if you feel down, don't hesitate to have some pie!"),
+          p("꼭 알아두면 좋은 사항: 원주율 모든 자리수를 구할 수 없는데 이유는 무리수이기 때문이다. 바빌로니아에서 
+          3 ⅛을 사용했고, 중국인은 3을 사용했으며 1665년 아이작 뉴튼은 16자리까지 계산을 했다."),
+          p("스위스 과학자는 2017년 원주율 22조 자리수 이상 계산했는데 100일 이상 걸렸다고 한다."),
+          p("특별한 10002 시행횟수도 있으니 꼭 시행해보시기 바랍니다."),
           hr()
         ),
         
@@ -157,11 +138,11 @@ ui = tagList(
           fluidRow(
             column(
               width = 6,
-              imageOutput("anim1")
+              imageOutput("circle_anim")
             ),
             column(
               width = 6,
-              imageOutput("anim2")
+              imageOutput("progress_anim")
             )
           )
         )

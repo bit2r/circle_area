@@ -1,11 +1,20 @@
 
+library(shiny)
+library(bslib)
+library(waiter)
+library(bsplus)
+library(shinyjs)
 
-
+library(ggplot2)
+library(gganimate)
+library(ggforce)
+library(glue)
+library(waiter)
 library(gifski)
 
 ## values for slider input
-pre_rendered = c(1 %o% 10^(2:4), 10002)
-slider_vals = sort(c(pre_rendered))
+pre_rendered <- c(1 %o% 10^(2:4), 10002)
+slider_vals <- sort(c(pre_rendered))
 
 the_data <- function(n) {
   x0 <-  0  # origin
@@ -57,7 +66,7 @@ make_anim1 <- function(the_data) {
   return(anim1)
 }
 
-make_anim1(the_data(10))
+# make_anim1(the_data(10))
 
 
 make_anim2 = function(the_data) {

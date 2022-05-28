@@ -1,0 +1,13 @@
+name: life_of_pi
+title: life_of_pi
+username:
+account: dl-dashboard
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6386944
+bundleId: 5953675
+url: https://dl-dashboard.shinyapps.io/life_of_pi/
+when: 1653699372.34287
+lastSyncTime: 1653699372.34291
+asMultiple: FALSE
+asStatic: FALSE

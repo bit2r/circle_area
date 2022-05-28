@@ -1,13 +1,6 @@
 
 
-
-library(ggplot2)
-library(gganimate)
-library(ggforce)
-library(glue)
-library(waiter)
-
-server = function(input, output, session){
+server <- function(input, output, session){
   
   Sys.sleep(2)
   waiter_hide()
@@ -16,9 +9,9 @@ server = function(input, output, session){
     updateNavbarPage(session = session, "navbar", "Work")
   }) 
   
-  ## initialize loading screen for anim1
-  w1 = Waiter$new(
-    id = "anim1",
+  ## initialize loading screen for Circle & Square Animation
+  w1 <- Waiter$new(
+    id = "circle_anim",
     html = tagList(
       div(
         spin_loaders(42, color = "#aaa"),
@@ -27,9 +20,9 @@ server = function(input, output, session){
     color = "#272b30"
   )
   
-  ## intialize loading screen for anim2
+  ## intialize loading screen for progress animation
   w2 = Waiter$new(
-    id = "anim2",
+    id = "progress_anim",
     html = tagList(
       div(
         spin_loaders(42, color = "#aaa"),
@@ -43,15 +36,13 @@ server = function(input, output, session){
     d1 = the_data(n)
     disable(id = "run")
 
-    output$anim1 = renderImage({
-      
-      
+    output$circle_anim <- renderImage({
       
       w1$show()  # show the waiter screen
       
       if(n %in% pre_rendered) {
         filename <- normalizePath(
-            file.path('./anims2', glue("anim1_{n}.gif"))  # get a pre-rendered image
+            file.path('./www/animations', glue("anim1_{n}.gif"))  # get a pre-rendered image
         )
         Sys.sleep(2)  # to show the loading bar
         w1$hide()  # hide the waiter screen
@@ -62,12 +53,11 @@ server = function(input, output, session){
       }
       
       else{
-        anim1 = make_anim1(d1)  # make the animation
+        anim1 <- make_anim1(d1)  # make the animation
         outfile <- tempfile(fileext='.gif')
         save_animation(anim1, outfile)
         
         w1$hide()
-        
         
         list(src = outfile,
              contentType = 'image/gif'
@@ -78,17 +68,17 @@ server = function(input, output, session){
     }, deleteFile = FALSE)
     
     ##############################################
-    output$anim2 = renderImage({
+    output$progress_anim <- renderImage({
+      
       w2$show()
       
       if(n %in% pre_rendered) {
         filename <- normalizePath(
-          file.path('./anims2', glue("anim2_{n}.gif"))
+          file.path('./www/animations', glue("anim2_{n}.gif"))
         )
         Sys.sleep(2)
         w2$hide()
         delay(12000, enable("run"))  # enable the action button when animation is done
-        
         
         list(src = filename,
              contentType = 'image/gif'
@@ -97,7 +87,7 @@ server = function(input, output, session){
       }
       
       else {
-        anim2 = make_anim2(d1)
+        anim2  <- make_anim2(d1)
         
         outfile <- tempfile(fileext='.gif')
         save_animation(anim2, outfile)
